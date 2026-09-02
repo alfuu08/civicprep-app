@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block titre %}Administration - {{ app_name }}{% endblock %}
+
+{% block contenu %}
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <h1 class="font-bold text-lg text-slate-900">{{ app_name }} — Administration</h1>
+    <div class="flex items-center gap-2">
+      <a href="{{ url_for('accueil') }}" class="text-sm text-slate-600 hover:text-france-blue px-3 py-2 rounded-lg">Voir l'application</a>
+      <a href="{{ url_for('admin_logout') }}" class="text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl font-medium transition">Se déconnecter</a>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+  <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">Ajouter une question</h2>
+      <p class="text-sm text-slate-500">Elle sera immédiatement visible par tous les visiteurs de l'application.</p>
+    </div>
+    <form method="post" class="space-y-4">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Thématique</label>
+        <select name="theme" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-france-blue text-sm">
+          {% for t in themes %}
+          <option value="{{ t }}">{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Intitulé de la question</label>
+        <input type="text" name="texte" required maxlength="500" placeholder="Ex : En quelle année..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm">
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input type="text" name="option_a" required maxlength="200" placeholder="Option A" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+        <input type="text" name="option_b" required maxlength="200" placeholder="Option B" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+        <input type="text" name="option_c" required maxlength="200" placeholder="Option C" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+        <input type="text" name="option_d" required maxlength="200" placeholder="Option D" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Index de la bonne réponse (0=A, 1=B, 2=C, 3=D)</label>
+        <input type="number" name="reponse_correcte" min="0" max="3" required value="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm">
+      </div>
+      <button type="submit" class="w-full bg-france-blue hover:bg-blue-800 text-white font-semibold py-3 rounded-xl text-sm shadow-md transition">
+        Ajouter la question à la base
+      </button>
+    </form>
+  </div>
+
+  <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+    <h2 class="text-lg font-bold text-slate-900">Questions existantes ({{ questions|length }})</h2>
+    <div class="divide-y divide-slate-100">
+      {% for q in questions %}
+      <div class="py-3 flex items-start justify-between gap-4">
+        <div>
+          <span class="text-xs font-semibold text-france-blue bg-blue-50 px-2 py-0.5 rounded-full">{{ q.theme }}</span>
+          <p class="text-sm text-slate-800 mt-1">{{ q.texte }}</p>
+        </div>
+        <form method="post" action="{{ url_for('admin_supprimer_question', question_id=q.id) }}"
+              onsubmit="return confirm('Supprimer définitivement cette question ?');">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="text-xs text-rose-600 hover:text-rose-800 font-medium whitespace-nowrap">Supprimer</button>
+        </form>
+      </div>
+      {% else %}
+      <p class="text-sm text-slate-400 py-4">Aucune question pour l'instant.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</main>
+{% endblock %}

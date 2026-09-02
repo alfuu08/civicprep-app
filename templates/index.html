@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+    <!-- En-tête / Navbar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-france-blue to-indigo-600 flex items-center text-white justify-center font-bold text-lg shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-flag" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900 leading-tight">{{ app_name }}</h1>
+                    <p class="text-xs text-slate-500">{{ app_tagline }}</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-1">
+                <button onclick="switchTab('home')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="home"><i class="fa-solid fa-house mr-2" aria-hidden="true"></i>Accueil</button>
+                <button onclick="switchTab('themes')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="themes"><i class="fa-solid fa-book-open mr-2" aria-hidden="true"></i>Thèmes</button>
+                <button onclick="switchTab('exam')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="exam"><i class="fa-solid fa-clipboard-question mr-2" aria-hidden="true"></i>Examen Blanc</button>
+                <button onclick="switchTab('livret')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="livret"><i class="fa-solid fa-landmark mr-2" aria-hidden="true"></i>Livret & Culture</button>
+            </nav>
+            <div class="flex items-center space-x-2">
+                <button onclick="openShareModal()" aria-label="Partager l'application" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2">
+                    <i class="fa-solid fa-share-nodes text-france-blue" aria-hidden="true"></i>
+                    <span class="hidden sm:inline">Partager</span>
+                </button>
+                <a href="{{ url_for('admin_panel') }}" class="bg-france-blue hover:bg-blue-800 text-white px-3.5 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2 shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                    <span class="hidden sm:inline">Admin</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu mobile du bas -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 flex justify-around py-3 px-2 shadow-lg">
+        <button onclick="switchTab('home')" class="mobile-btn flex flex-col items-center text-xs text-france-blue font-medium" data-target="home"><i class="fa-solid fa-house text-lg mb-1" aria-hidden="true"></i>Accueil</button>
+        <button onclick="switchTab('themes')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="themes"><i class="fa-solid fa-book-open text-lg mb-1" aria-hidden="true"></i>Thèmes</button>
+        <button onclick="switchTab('exam')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="exam"><i class="fa-solid fa-clipboard-question text-lg mb-1" aria-hidden="true"></i>Examen</button>
+        <button onclick="switchTab('livret')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="livret"><i class="fa-solid fa-landmark text-lg mb-1" aria-hidden="true"></i>Livret</button>
+    </div>
+
+    <!-- Contenu Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 md:pb-8">
+
+        <!-- ONGLET : ACCUEIL -->
+        <section id="tab-home" class="tab-content animate-fade space-y-8">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-france-blue via-indigo-700 to-blue-900 text-white p-8 sm:p-12 shadow-xl">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fa-solid fa-monument" aria-hidden="true"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white backdrop-blur-md border border-white/20">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mr-2 text-[10px]" aria-hidden="true"></i> Conforme au référentiel officiel & RGPD
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Réussissez votre Examen Civique (CSP)</h2>
+                    <p class="text-blue-100 text-sm sm:text-base leading-relaxed">
+                        Préparez sereinement votre obtention de titre de séjour pluriannuel grâce à notre module d'entraînement par thèmes et examens blancs chronométrés.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <button onclick="switchTab('exam')" class="bg-white text-france-blue hover:bg-blue-50 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg transition flex items-center space-x-2">
+                            <span>Lancer un examen blanc</span>
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                        <button onclick="switchTab('themes')" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-3 rounded-xl font-semibold text-sm backdrop-blur-md transition">
+                            Réviser par thème
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-france-blue flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">5 Thématiques Officielles</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Principes républicains, institutions, droits & devoirs, histoire/géo/culture et vie quotidienne en France.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-rose-50 text-france-red flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Examens Blancs 40 Questions</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Simulation en conditions réelles : notation sur 40, bilan détaillé des points forts et axes d'amélioration.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Sécurité & RGPD</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Vos scores restent sur votre appareil. Aucune donnée personnelle n'est collectée.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ONGLET : THEMES -->
+        <section id="tab-themes" class="tab-content hidden animate-fade space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">Révisions par Thème</h2>
+                <p class="text-sm text-slate-500">Sélectionnez une thématique pour cibler vos révisions d'entraînement.</p>
+            </div>
+            <div id="themes-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div id="theme-quiz-container" class="hidden bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex justify-between items-center border-b pb-4">
+                    <h3 id="current-theme-title" class="text-lg font-bold text-slate-900">Thème</h3>
+                    <button onclick="closeThemeQuiz()" aria-label="Fermer la révision" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+                </div>
+                <div id="theme-question-box" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- ONGLET : EXAMEN BLANC -->
+        <section id="tab-exam" class="tab-content hidden animate-fade space-y-6">
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm max-w-3xl mx-auto text-center space-y-6" id="exam-intro">
+                <div class="w-20 h-20 bg-blue-50 text-france-blue rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
+                    <i class="fa-solid fa-award" aria-hidden="true"></i>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-bold text-slate-900">Examen Blanc officiel (40 Questions)</h2>
+                    <p class="text-sm text-slate-500 max-w-md mx-auto">
+                        Testez vos connaissances en conditions réelles. Répondez aux 40 questions sans correction immédiate, puis découvrez votre score final ainsi que votre bilan personnalisé.
+                    </p>
+                </div>
+                <button onclick="startExam()" class="bg-france-blue hover:bg-blue-800 text-white px-8 py-3.5 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/25 transition">
+                    Commencer l'examen
+                </button>
+            </div>
+
+            <div id="exam-active" class="hidden max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span id="exam-progress" class="text-sm font-semibold text-france-blue">Question 1 sur 40</span>
+                        <span class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full"><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i> Mode Examen</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="exam-progress-bar-track">
+                        <div id="exam-progress-bar" class="h-full bg-france-blue transition-all duration-300" style="width:0%"></div>
+                    </div>
+                </div>
+                <div id="exam-question-content" class="space-y-6"></div>
+                <div class="flex justify-between pt-4 border-t">
+                    <button id="prev-btn" onclick="prevExamQuestion()" class="px-5 py-2.5 border border-slate-200 text-slate-600 rounded-xl font-medium text-sm hover:bg-slate-50 transition disabled:opacity-40" disabled>Précédent</button>
+                    <button id="next-btn" onclick="nextExamQuestion()" class="px-6 py-2.5 bg-france-blue text-white rounded-xl font-medium text-sm hover:bg-blue-800 transition shadow-md shadow-blue-500/20">Suivant</button>
+                </div>
+            </div>
+
+            <div id="exam-result" class="hidden max-w-3xl mx-auto bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6"></div>
+        </section>
+
+        <!-- ONGLET : LIVRET CITOYEN & CULTURE -->
+        <section id="tab-livret" class="tab-content hidden animate-fade space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">Livret Citoyen & Culture Française</h2>
+                <p class="text-sm text-slate-500">Les essentiels à connaître pour réussir l'entretien et l'examen.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3 text-france-blue">
+                        <i class="fa-solid fa-landmark-flag text-2xl" aria-hidden="true"></i>
+                        <h3 class="font-bold text-lg text-slate-900">Principes & Valeurs de la République</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        La France est une République indivisible, laïque, démocratique et sociale. Sa devise est « Liberté, Égalité, Fraternité » et son drapeau tricolore bleu, blanc, rouge.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3 text-france-red">
+                        <i class="fa-solid fa-scale-balanced text-2xl" aria-hidden="true"></i>
+                        <h3 class="font-bold text-lg text-slate-900">Droits et Devoirs</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Le respect des lois s'impose à tous. La liberté d'expression, l'égalité hommes-femmes et la liberté de conscience sont garanties par la Constitution.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ONGLET : MENTIONS LÉGALES & RGPD -->
+        <section id="tab-legal" class="tab-content hidden animate-fade space-y-6 max-w-3xl mx-auto bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <h2 class="text-2xl font-bold text-slate-900 border-b pb-4">Mentions Légales & Politique de Confidentialité (RGPD)</h2>
+            <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+                <h3 class="font-bold text-slate-900 text-base">1. Éditeur de l'application</h3>
+                <p>Nom / Raison sociale : {{ editor_name }}<br>
+                Contact : {{ contact_email }}</p>
+
+                <h3 class="font-bold text-slate-900 text-base">2. Hébergement</h3>
+                <p>Cette application est hébergée sur des serveurs sécurisés. Les flux de données sont chiffrés via le protocole HTTPS.</p>
+
+                <h3 class="font-bold text-slate-900 text-base">3. Protection des données personnelles (RGPD)</h3>
+                <p>Conformément au Règlement Général sur la Protection des Données (RGPD) :</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>Absence de collecte de données sensibles :</strong> aucune donnée personnelle nominative n'est requise ni stockée sur le serveur pour utiliser l'application.</li>
+                    <li><strong>Stockage local :</strong> vos scores et votre progression sont enregistrés uniquement sur votre appareil, via le stockage local de votre navigateur. Vous pouvez les effacer à tout moment.</li>
+                    <li><strong>Cookies :</strong> aucun cookie publicitaire ou de traçage tiers n'est utilisé.</li>
+                </ul>
+
+                <h3 class="font-bold text-slate-900 text-base">4. Droits des utilisateurs</h3>
+                <p>Vous disposez d'un droit d'accès, de modification et de suppression de vos données locales directement depuis votre navigateur.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 space-x-4">
+        <span>&copy; 2026 {{ app_name }}. Tous droits réservés.</span>
+        <a href="#" onclick="switchTab('legal')" class="hover:underline text-france-blue font-medium">Mentions Légales & RGPD</a>
+    </footer>
+
+    <!-- BANDEAU COOKIES / RGPD -->
+    <div id="cookie-banner" class="fixed bottom-16 md:bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl z-50 hidden flex-col space-y-3 border border-slate-800 animate-fade">
+        <div class="flex items-start space-x-3">
+            <i class="fa-solid fa-cookie-bite text-amber-400 text-xl mt-1" aria-hidden="true"></i>
+            <div>
+                <h4 class="font-bold text-sm">Respect de votre vie privée (RGPD)</h4>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                    Nous n'utilisons aucun traceur publicitaire. Seules des données de révision locales sont conservées sur votre appareil.
+                </p>
+            </div>
+        </div>
+        <div class="flex space-x-2 pt-1">
+            <button onclick="acceptCookies()" class="flex-1 bg-france-blue hover:bg-blue-700 text-white py-2 rounded-xl text-xs font-semibold transition">Compris et accepter</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE PARTAGE -->
+    <div id="share-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl animate-fade relative">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-slate-900">Partager l'application</h3>
+                <button onclick="closeShareModal()" aria-label="Fermer" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+            </div>
+            <p class="text-sm text-slate-500">Partagez ce lien ou scannez le QR code pour donner accès à l'application.</p>
+            <div class="flex flex-col items-center justify-center space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <img id="qrcode-img" src="" alt="QR code menant vers l'application" class="w-40 h-40 rounded-xl shadow-md border bg-white p-2">
+                <div class="flex items-center space-x-2 w-full">
+                    <input type="text" id="share-url" readonly aria-label="Lien de partage" class="w-full bg-white px-3 py-2 rounded-xl border text-xs text-slate-600 select-all" value="">
+                    <button onclick="copyShareLink()" class="bg-france-blue text-white px-4 py-2 rounded-xl text-xs font-semibold shrink-0 hover:bg-blue-800 transition">Copier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script nonce="{{ csp_nonce }}">
+        // Les questions viennent du serveur (base de données partagée), pas d'un
+        // tableau codé en dur : ce que l'admin ajoute est vu par tout le monde.
+        // `tojson` est le filtre Flask prévu pour être injecté sans risque dans
+        // une balise <script> (il échappe correctement les caractères sensibles).
+        const questionsDatabase = {{ questions|tojson }};
+        const EXAM_QUESTION_COUNT = {{ config.EXAM_QUESTION_COUNT }};
+        const EXAM_PASS_SCORE = {{ config.EXAM_PASS_SCORE }};
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" nonce="{{ csp_nonce }}"></script>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titre %}{{ app_name }} - {{ app_tagline }}{% endblock %}</title>
+    <meta name="description" content="{{ app_name }} : préparez sereinement votre examen civique français (CSP) par thèmes et examens blancs chronométrés.">
+
+    <!-- Aperçu de lien (réseaux sociaux, WhatsApp...) -->
+    <meta property="og:title" content="{{ app_name }} - {{ app_tagline }}">
+    <meta property="og:description" content="Préparez votre examen civique français par thèmes et examens blancs.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='33' height='100' fill='%23002395'/%3E%3Crect x='33' width='34' height='100' fill='%23fff'/%3E%3Crect x='67' width='33' height='100' fill='%23ED2939'/%3E%3C/svg%3E">
+
+    <!-- Tailwind CDN : suffisant pour ce projet sans étape de build Node.
+         Limite connue : Tailwind recommande un build de production pour
+         de gros trafics (voir README, section "Pistes d'amélioration"). -->
+    <script src="https://cdn.tailwindcss.com" nonce="{{ csp_nonce }}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script nonce="{{ csp_nonce }}">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { france: { blue: '#002395', red: '#ED2939', light: '#F8FAFC' } }
+                }
+            }
+        }
+    </script>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col font-sans selection:bg-france-blue selection:text-white">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-full max-w-md px-4 space-y-2">
+        {% for categorie, message in messages %}
+        <div class="flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-medium shadow-lg animate-fade
+                    {{ 'bg-emerald-600 text-white' if categorie == 'success'
+                       else 'bg-rose-600 text-white' if categorie == 'danger'
+                       else 'bg-slate-800 text-white' }}">
+          <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block contenu %}{% endblock %}
+
+</body>
+</html>
