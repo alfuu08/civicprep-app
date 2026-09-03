@@ -4,12 +4,20 @@
  * `questionsDatabase`, `EXAM_QUESTION_COUNT` et `EXAM_PASS_SCORE` sont
  * injectés par le serveur juste avant ce fichier (voir templates/index.html).
  *
- * Point de sécurité important : le texte des questions/options vient de la
- * base de données (donc, in fine, d'un formulaire rempli par l'admin). On ne
- * fait jamais confiance à ce texte lors de l'insertion dans le DOM : toute
+ * Point de sécurité important n°1 : le texte des questions/options vient de
+ * la base de données (donc, in fine, d'un formulaire rempli par l'admin). On
+ * ne fait jamais confiance à ce texte lors de l'insertion dans le DOM : toute
  * valeur passée dans un gabarit HTML (innerHTML) passe par escapeHtml()
  * pour empêcher qu'un bout de HTML/JS injecté ne s'exécute chez les
  * visiteurs (faille XSS stockée).
+ *
+ * Point de sécurité important n°2 : aucun attribut onclick="..." n'est
+ * utilisé dans le HTML. Notre politique de sécurité (CSP, voir app.py)
+ * bloque volontairement ces gestionnaires d'événements "en ligne", car ils
+ * sont un vecteur classique d'injection de code. À la place, chaque élément
+ * cliquable porte un attribut data-action (et parfois data-arg), et UNE
+ * seule fonction ci-dessous écoute tous les clics de la page et distribue
+ * vers la bonne action ("délégation d'événements").
  */
 
 function escapeHtml(texte) {
@@ -17,6 +25,41 @@ function escapeHtml(texte) {
     div.textContent = String(texte);
     return div.innerHTML;
 }
+
+// --- Distribution centralisée des clics (compatible avec la CSP) -----------
+
+const ACTIONS = {
+    'switch-tab': (arg) => switchTab(arg),
+    'open-share-modal': () => openShareModal(),
+    'close-share-modal': () => closeShareModal(),
+    'copy-share-link': () => copyShareLink(),
+    'accept-cookies': () => acceptCookies(),
+    'close-theme-quiz': () => closeThemeQuiz(),
+    'start-theme-quiz': (arg) => startThemeQuiz(arg),
+    'answer-theme-question': (arg) => {
+        const [selected, correct] = arg.split(',').map(Number);
+        answerThemeQuestion(selected, correct);
+    },
+    'start-exam': () => startExam(),
+    'prev-exam-question': () => prevExamQuestion(),
+    'next-exam-question': () => nextExamQuestion(),
+    'submit-exam': () => submitExam(),
+};
+
+document.addEventListener('click', (event) => {
+    const cible = event.target.closest('[data-action]');
+    if (!cible) return;
+    const gestionnaire = ACTIONS[cible.dataset.action];
+    if (!gestionnaire) return;
+    event.preventDefault();
+    gestionnaire(cible.dataset.arg);
+});
+
+document.addEventListener('change', (event) => {
+    if (event.target.matches('input[name="exam-opt"]')) {
+        selectExamAnswer(Number(event.target.value));
+    }
+});
 
 // --- Bandeau cookies RGPD ---------------------------------------------------
 
@@ -87,7 +130,7 @@ function renderThemes() {
                 <h3 class="font-bold text-lg text-slate-900">${escapeHtml(theme)}</h3>
                 <p class="text-xs text-slate-500 mt-1">${questionsDatabase.filter(q => q.theme === theme).length} questions disponibles</p>
             </div>
-            <button onclick="startThemeQuiz(${JSON.stringify(theme)})" class="bg-slate-100 hover:bg-france-blue hover:text-white text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-sm transition flex items-center justify-between">
+            <button data-action="start-theme-quiz" data-arg="${escapeHtml(theme)}" class="bg-slate-100 hover:bg-france-blue hover:text-white text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-sm transition flex items-center justify-between">
                 <span>Commencer la révision</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </button>
@@ -119,7 +162,7 @@ function renderThemeQuestion() {
                 </div>
                 <h4 class="text-xl font-bold text-slate-900">Révision terminée !</h4>
                 <p class="text-sm text-slate-600">Score obtenu : ${activeThemeScore} / ${activeThemeQuestions.length}</p>
-                <button onclick="closeThemeQuiz()" class="bg-france-blue text-white px-6 py-2.5 rounded-xl font-semibold text-sm">Retour aux thèmes</button>
+                <button data-action="close-theme-quiz" class="bg-france-blue text-white px-6 py-2.5 rounded-xl font-semibold text-sm">Retour aux thèmes</button>
             </div>
         `;
         return;
@@ -131,7 +174,7 @@ function renderThemeQuestion() {
             <h4 class="font-bold text-base text-slate-900">${escapeHtml(q.q)}</h4>
             <div class="space-y-2">
                 ${q.options.map((opt, idx) => `
-                    <button onclick="answerThemeQuestion(${idx}, ${q.answer})" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-blue-50 hover:border-france-blue text-sm transition font-medium text-slate-700 option-btn">
+                    <button data-action="answer-theme-question" data-arg="${idx},${q.answer}" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:bg-blue-50 hover:border-france-blue text-sm transition font-medium text-slate-700 option-btn">
                         ${escapeHtml(opt)}
                     </button>
                 `).join('')}
@@ -204,7 +247,7 @@ function renderExamQuestion() {
             <div class="space-y-3">
                 ${q.options.map((opt, idx) => `
                     <label class="flex items-center space-x-3 p-4 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition ${userAnswers[currentExamIndex] === idx ? 'bg-blue-50 border-france-blue ring-1 ring-france-blue' : ''}">
-                        <input type="radio" name="exam-opt" value="${idx}" ${userAnswers[currentExamIndex] === idx ? 'checked' : ''} onchange="selectExamAnswer(${idx})" class="w-4 h-4 text-france-blue">
+                        <input type="radio" name="exam-opt" value="${idx}" ${userAnswers[currentExamIndex] === idx ? 'checked' : ''} class="w-4 h-4 text-france-blue">
                         <span class="text-sm font-medium text-slate-700">${escapeHtml(opt)}</span>
                     </label>
                 `).join('')}
@@ -216,10 +259,10 @@ function renderExamQuestion() {
     const nextBtn = document.getElementById('next-btn');
     if (currentExamIndex === examQuestions.length - 1) {
         nextBtn.innerText = "Terminer et corriger";
-        nextBtn.setAttribute('onclick', 'submitExam()');
+        nextBtn.dataset.action = 'submit-exam';
     } else {
         nextBtn.innerText = "Suivant";
-        nextBtn.setAttribute('onclick', 'nextExamQuestion()');
+        nextBtn.dataset.action = 'next-exam-question';
     }
 }
 
@@ -279,7 +322,7 @@ function submitExam() {
                 <h4 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-chart-pie mr-2 text-france-blue" aria-hidden="true"></i> Bilan personnalisé & Points d'amélioration</h4>
                 <p class="text-xs text-slate-600 leading-relaxed">${bilan}</p>
             </div>
-            <button onclick="startExam()" class="bg-france-blue text-white px-8 py-3 rounded-xl font-semibold text-sm shadow-md hover:bg-blue-800 transition">
+            <button data-action="start-exam" class="bg-france-blue text-white px-8 py-3 rounded-xl font-semibold text-sm shadow-md hover:bg-blue-800 transition">
                 Recommencer un examen blanc
             </button>
         </div>

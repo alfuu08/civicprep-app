@@ -5,7 +5,7 @@
     <!-- En-tête / Navbar -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+            <div class="flex items-center space-x-3 cursor-pointer" data-action="switch-tab" data-arg="home">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-france-blue to-indigo-600 flex items-center text-white justify-center font-bold text-lg shadow-md shadow-blue-500/20">
                     <i class="fa-solid fa-flag" aria-hidden="true"></i>
                 </div>
@@ -15,13 +15,13 @@
                 </div>
             </div>
             <nav class="hidden md:flex space-x-1">
-                <button onclick="switchTab('home')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="home"><i class="fa-solid fa-house mr-2" aria-hidden="true"></i>Accueil</button>
-                <button onclick="switchTab('themes')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="themes"><i class="fa-solid fa-book-open mr-2" aria-hidden="true"></i>Thèmes</button>
-                <button onclick="switchTab('exam')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="exam"><i class="fa-solid fa-clipboard-question mr-2" aria-hidden="true"></i>Examen Blanc</button>
-                <button onclick="switchTab('livret')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="livret"><i class="fa-solid fa-landmark mr-2" aria-hidden="true"></i>Livret & Culture</button>
+                <button data-action="switch-tab" data-arg="home" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="home"><i class="fa-solid fa-house mr-2" aria-hidden="true"></i>Accueil</button>
+                <button data-action="switch-tab" data-arg="themes" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="themes"><i class="fa-solid fa-book-open mr-2" aria-hidden="true"></i>Thèmes</button>
+                <button data-action="switch-tab" data-arg="exam" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="exam"><i class="fa-solid fa-clipboard-question mr-2" aria-hidden="true"></i>Examen Blanc</button>
+                <button data-action="switch-tab" data-arg="livret" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-france-blue hover:bg-slate-50 transition" data-target="livret"><i class="fa-solid fa-landmark mr-2" aria-hidden="true"></i>Livret & Culture</button>
             </nav>
             <div class="flex items-center space-x-2">
-                <button onclick="openShareModal()" aria-label="Partager l'application" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2">
+                <button data-action="open-share-modal" aria-label="Partager l'application" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2">
                     <i class="fa-solid fa-share-nodes text-france-blue" aria-hidden="true"></i>
                     <span class="hidden sm:inline">Partager</span>
                 </button>
@@ -35,10 +35,10 @@
 
     <!-- Menu mobile du bas -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 flex justify-around py-3 px-2 shadow-lg">
-        <button onclick="switchTab('home')" class="mobile-btn flex flex-col items-center text-xs text-france-blue font-medium" data-target="home"><i class="fa-solid fa-house text-lg mb-1" aria-hidden="true"></i>Accueil</button>
-        <button onclick="switchTab('themes')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="themes"><i class="fa-solid fa-book-open text-lg mb-1" aria-hidden="true"></i>Thèmes</button>
-        <button onclick="switchTab('exam')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="exam"><i class="fa-solid fa-clipboard-question text-lg mb-1" aria-hidden="true"></i>Examen</button>
-        <button onclick="switchTab('livret')" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="livret"><i class="fa-solid fa-landmark text-lg mb-1" aria-hidden="true"></i>Livret</button>
+        <button data-action="switch-tab" data-arg="home" class="mobile-btn flex flex-col items-center text-xs text-france-blue font-medium" data-target="home"><i class="fa-solid fa-house text-lg mb-1" aria-hidden="true"></i>Accueil</button>
+        <button data-action="switch-tab" data-arg="themes" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="themes"><i class="fa-solid fa-book-open text-lg mb-1" aria-hidden="true"></i>Thèmes</button>
+        <button data-action="switch-tab" data-arg="exam" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="exam"><i class="fa-solid fa-clipboard-question text-lg mb-1" aria-hidden="true"></i>Examen</button>
+        <button data-action="switch-tab" data-arg="livret" class="mobile-btn flex flex-col items-center text-xs text-slate-500 font-medium" data-target="livret"><i class="fa-solid fa-landmark text-lg mb-1" aria-hidden="true"></i>Livret</button>
     </div>
 
     <!-- Contenu Principal -->
@@ -59,11 +59,11 @@
                         Préparez sereinement votre obtention de titre de séjour pluriannuel grâce à notre module d'entraînement par thèmes et examens blancs chronométrés.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-4">
-                        <button onclick="switchTab('exam')" class="bg-white text-france-blue hover:bg-blue-50 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg transition flex items-center space-x-2">
+                        <button data-action="switch-tab" data-arg="exam" class="bg-white text-france-blue hover:bg-blue-50 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg transition flex items-center space-x-2">
                             <span>Lancer un examen blanc</span>
                             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </button>
-                        <button onclick="switchTab('themes')" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-3 rounded-xl font-semibold text-sm backdrop-blur-md transition">
+                        <button data-action="switch-tab" data-arg="themes" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-3 rounded-xl font-semibold text-sm backdrop-blur-md transition">
                             Réviser par thème
                         </button>
                     </div>
@@ -105,7 +105,7 @@
             <div id="theme-quiz-container" class="hidden bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                 <div class="flex justify-between items-center border-b pb-4">
                     <h3 id="current-theme-title" class="text-lg font-bold text-slate-900">Thème</h3>
-                    <button onclick="closeThemeQuiz()" aria-label="Fermer la révision" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+                    <button data-action="close-theme-quiz" aria-label="Fermer la révision" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
                 </div>
                 <div id="theme-question-box" class="space-y-4"></div>
             </div>
@@ -123,7 +123,7 @@
                         Testez vos connaissances en conditions réelles. Répondez aux 40 questions sans correction immédiate, puis découvrez votre score final ainsi que votre bilan personnalisé.
                     </p>
                 </div>
-                <button onclick="startExam()" class="bg-france-blue hover:bg-blue-800 text-white px-8 py-3.5 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/25 transition">
+                <button data-action="start-exam" class="bg-france-blue hover:bg-blue-800 text-white px-8 py-3.5 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/25 transition">
                     Commencer l'examen
                 </button>
             </div>
@@ -140,8 +140,8 @@
                 </div>
                 <div id="exam-question-content" class="space-y-6"></div>
                 <div class="flex justify-between pt-4 border-t">
-                    <button id="prev-btn" onclick="prevExamQuestion()" class="px-5 py-2.5 border border-slate-200 text-slate-600 rounded-xl font-medium text-sm hover:bg-slate-50 transition disabled:opacity-40" disabled>Précédent</button>
-                    <button id="next-btn" onclick="nextExamQuestion()" class="px-6 py-2.5 bg-france-blue text-white rounded-xl font-medium text-sm hover:bg-blue-800 transition shadow-md shadow-blue-500/20">Suivant</button>
+                    <button id="prev-btn" data-action="prev-exam-question" class="px-5 py-2.5 border border-slate-200 text-slate-600 rounded-xl font-medium text-sm hover:bg-slate-50 transition disabled:opacity-40" disabled>Précédent</button>
+                    <button id="next-btn" data-action="next-exam-question" class="px-6 py-2.5 bg-france-blue text-white rounded-xl font-medium text-sm hover:bg-blue-800 transition shadow-md shadow-blue-500/20">Suivant</button>
                 </div>
             </div>
 
@@ -204,7 +204,7 @@
 
     <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 space-x-4">
         <span>&copy; 2026 {{ app_name }}. Tous droits réservés.</span>
-        <a href="#" onclick="switchTab('legal')" class="hover:underline text-france-blue font-medium">Mentions Légales & RGPD</a>
+        <a href="#" data-action="switch-tab" data-arg="legal" class="hover:underline text-france-blue font-medium">Mentions Légales & RGPD</a>
     </footer>
 
     <!-- BANDEAU COOKIES / RGPD -->
@@ -219,7 +219,7 @@
             </div>
         </div>
         <div class="flex space-x-2 pt-1">
-            <button onclick="acceptCookies()" class="flex-1 bg-france-blue hover:bg-blue-700 text-white py-2 rounded-xl text-xs font-semibold transition">Compris et accepter</button>
+            <button data-action="accept-cookies" class="flex-1 bg-france-blue hover:bg-blue-700 text-white py-2 rounded-xl text-xs font-semibold transition">Compris et accepter</button>
         </div>
     </div>
 
@@ -228,14 +228,14 @@
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl animate-fade relative">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-bold text-slate-900">Partager l'application</h3>
-                <button onclick="closeShareModal()" aria-label="Fermer" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
+                <button data-action="close-share-modal" aria-label="Fermer" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i></button>
             </div>
             <p class="text-sm text-slate-500">Partagez ce lien ou scannez le QR code pour donner accès à l'application.</p>
             <div class="flex flex-col items-center justify-center space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                 <img id="qrcode-img" src="" alt="QR code menant vers l'application" class="w-40 h-40 rounded-xl shadow-md border bg-white p-2">
                 <div class="flex items-center space-x-2 w-full">
                     <input type="text" id="share-url" readonly aria-label="Lien de partage" class="w-full bg-white px-3 py-2 rounded-xl border text-xs text-slate-600 select-all" value="">
-                    <button onclick="copyShareLink()" class="bg-france-blue text-white px-4 py-2 rounded-xl text-xs font-semibold shrink-0 hover:bg-blue-800 transition">Copier</button>
+                    <button data-action="copy-share-link" class="bg-france-blue text-white px-4 py-2 rounded-xl text-xs font-semibold shrink-0 hover:bg-blue-800 transition">Copier</button>
                 </div>
             </div>
         </div>
